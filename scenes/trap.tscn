@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://dphf436oqba5j"]
+
+[ext_resource type="Script" uid="uid://cdv5mibpi4aff" path="res://scripts/area_2d.gd" id="1_nhxoo"]
+[ext_resource type="Texture2D" uid="uid://xkt87eumvifm" path="res://assets/sprites/test_character/Trap and Weapon/Spike_B.png" id="1_svk5y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nhxoo"]
+size = Vector2(26, 10)
+
+[node name="trap" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_nhxoo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-0.5, 0.5)
+scale = Vector2(0.996875, 1.03125)
+texture = ExtResource("1_svk5y")
+region_enabled = true
+region_rect = Rect2(64.1476, 1.04813, 31.8384, 30.6456)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 0)
+shape = SubResource("RectangleShape2D_nhxoo")
+
+[node name="Timer" type="Timer" parent="."]
