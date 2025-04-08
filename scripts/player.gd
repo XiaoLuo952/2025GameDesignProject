@@ -15,11 +15,12 @@ var dash_timer := 0.0
 
 #盲猜每帧进行
 func _physics_process(delta: float) -> void:
-	# 重力
-	if not is_on_floor() and not is_dashing:
-		velocity += get_gravity() * delta
-	if is_on_floor() :
-		can_dash = true #触地情况下可以立刻刷新冲刺
+	if not is_dashing:
+		# 重力
+		if not is_on_floor():
+			velocity += get_gravity() * delta
+		if is_on_floor() :
+			can_dash = true #触地情况下可以立刻刷新冲刺
 
 	# 跳跃逻辑a
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor() and not is_dashing:
@@ -37,10 +38,13 @@ func _physics_process(delta: float) -> void:
 		var dash_direction = Vector2(
 			Input.get_axis("ui_left", "ui_right"),
 			Input.get_axis("ui_up", "ui_down")  # 即使限制移动，仍允许八方向冲刺
-		).normalized()#记录八个方向 
-		if dash_direction != Vector2.ZERO :
-			can_dash = false
-			start_dash(dash_direction)
+		)#记录八个方向 
+		if dash_direction == Vector2.ZERO:
+			dash_direction = Vector2.RIGHT
+			
+		dash_direction = dash_direction.normalized()
+		can_dash = false
+		start_dash(dash_direction)
 			
 	if is_dashing:
 		dash_timer -= delta
