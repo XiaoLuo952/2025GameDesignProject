@@ -1,7 +1,37 @@
 [gd_scene load_steps=6 format=3 uid="uid://dnimlnlyjm67t"]
 
-[ext_resource type="Texture2D" uid="uid://dfyni3lukk17c" path="res://tupian/联想截图_20250408193050.png" id="1_jmw0l"]
-[ext_resource type="Script" uid="uid://7ygxir7jlar0" path="res://scripts/tanhaung.gd" id="2_ddpc3"]
+[ext_resource type="Texture2D" uid="uid://dfyni3lukk17c" path="res://assets/sprites/tupian/联想截图_20250408193050.png" id="1_jmw0l"]
+
+[sub_resource type="GDScript" id="GDScript_jmw0l"]
+script/source = "extends Area2D
+
+@export var bounce_strength := 500.0    # 弹力强度
+@export var bounce_direction := Vector2.UP  # 默认向上
+@export var use_animation := true       # 是否使用动画
+
+@onready var animation_player = $AnimationPlayer
+
+func _ready():
+	# 连接碰撞信号
+	body_entered.connect(_on_body_entered)
+	print(\"弹簧初始化完成\")
+
+func _on_body_entered(body):
+	print(\"物体触碰到弹簧:\", body.name)
+	if body.is_in_group(\"player\"):
+		print(\"玩家触发弹簧效果\")
+		apply_bounce(body)
+		if use_animation:
+			animation_player.play(\"compress\")
+
+func apply_bounce(body):
+	var final_direction = bounce_direction.normalized()
+	# 根据不同物理体类型处理
+	if body is CharacterBody2D:
+		body.velocity = final_direction * bounce_strength
+	elif body is RigidBody2D:
+		body.apply_central_impulse(final_direction * bounce_strength)
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ddpc3"]
 size = Vector2(28.4091, 11.6472)
@@ -40,7 +70,7 @@ _data = {
 
 [node name="Area2D" type="Area2D"]
 position = Vector2(297.352, 274.126)
-script = ExtResource("2_ddpc3")
+script = SubResource("GDScript_jmw0l")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(5.05485, -2.32649)
