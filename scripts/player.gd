@@ -13,6 +13,15 @@ var can_dash := true
 var is_dashing := false
 var dash_timer := 0.0
 
+var bounce_force := 1000.0  # 弹射力大小，可在编辑器中调整
+
+func _on_spring_body_entered(spring):
+	# 计算圆心连线方向
+	var direction = (spring.global_position - global_position).normalized()
+	
+	# 应用弹射力
+	velocity = direction * bounce_force
+
 #盲猜每帧进行
 func _physics_process(delta: float) -> void:
 	if not is_dashing:

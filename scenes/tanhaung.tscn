@@ -1,10 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dnimlnlyjm67t"]
+[gd_scene load_steps=5 format=3 uid="uid://dnimlnlyjm67t"]
 
-[ext_resource type="Texture2D" uid="uid://dfyni3lukk17c" path="res://tupian/联想截图_20250408193050.png" id="1_jmw0l"]
 [ext_resource type="Script" uid="uid://7ygxir7jlar0" path="res://scripts/tanhaung.gd" id="2_ddpc3"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ddpc3"]
-size = Vector2(28.4091, 11.6472)
 
 [sub_resource type="Animation" id="Animation_jmw0l"]
 length = 0.001
@@ -38,22 +34,21 @@ _data = {
 &"RESET": SubResource("Animation_jmw0l")
 }
 
-[node name="Area2D" type="Area2D"]
-position = Vector2(297.352, 274.126)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ddpc3"]
+size = Vector2(11.3935, 29.4356)
+
+[node name="tanhaung" type="Area2D"]
+position = Vector2(5.05485, -2.32649)
 script = ExtResource("2_ddpc3")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(5.05485, -2.32649)
-scale = Vector2(0.0459674, 0.0494273)
-texture = ExtResource("1_jmw0l")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(5.14801, -2.62601)
-scale = Vector2(0.88, 0.944431)
-shape = SubResource("RectangleShape2D_ddpc3")
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../Sprite2D")
+root_node = NodePath("")
 libraries = {
 &"": SubResource("AnimationLibrary_rouf3")
 }
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4.94515, -1.67351)
+rotation = -0.031096
+scale = Vector2(0.88, 0.944431)
+shape = SubResource("RectangleShape2D_ddpc3")
