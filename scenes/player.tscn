@@ -59,3 +59,12 @@ frame_progress = 0.998621
 visible = false
 position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_fjrip")
+
+[node name="WallRayLeft" type="RayCast2D" parent="."]
+position = Vector2(2, -5)
+target_position = Vector2(5, 0)
+collision_mask = 3
+
+[node name="WallRayRight" type="RayCast2D" parent="."]
+position = Vector2(-2, -5)
+target_position = Vector2(-5, 0)

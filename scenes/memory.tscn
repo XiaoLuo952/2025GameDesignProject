@@ -1,7 +1,67 @@
 [gd_scene load_steps=17 format=3 uid="uid://jkhsmctuq6t0"]
 
-[ext_resource type="Script" uid="uid://7ygxir7jlar0" path="res://scripts/tanhaung.gd" id="1_au0oe"]
 [ext_resource type="Texture2D" uid="uid://cwe45jn3lb0cy" path="res://assets/sprites/coin.png" id="1_c5y6f"]
+
+[sub_resource type="GDScript" id="GDScript_c5y6f"]
+script/source = "extends Area2D
+#收集并存储数目，可能需要针对每个实例化对象编号
+
+# 刷新设置
+@export var respawn_time := 5.0  # 重生时间，单位秒
+var initial_position := Vector2.ZERO  # 初始位置
+var is_collected := false  # 是否已被收集
+var respawn_timer := 0.0  # 重生计时器
+
+# 保存原始显示状态的引用
+@onready var sprite = $AnimatedSprite2D
+@onready var collision = $CollisionShape2D
+
+func _ready():
+	# 连接信号
+	body_entered.connect(_on_body_entered)
+	# 记录初始位置
+	initial_position = global_position
+	print(\"Memory初始化完成，位置:\", initial_position)
+
+func _process(delta):
+	# 如果已被收集，更新计时器
+	if is_collected:
+		respawn_timer -= delta
+		if respawn_timer <= 0:
+			respawn()
+
+func _on_body_entered(body: Node2D) -> void:
+	if is_collected:
+		return  # 如果已被收集，忽略碰撞
+		
+	print(\"物体触碰到Memory:\", body.name)
+	if body.is_in_group(\"player\"):
+		print(\"玩家收集到Memory\")
+		# 设置玩家冲刺次数为2
+		body.set_dash_count(2)
+		collect()
+
+# 收集Memory
+func collect():
+	is_collected = true
+	respawn_timer = respawn_time
+	
+	# 隐藏而不是销毁
+	sprite.visible = false
+	collision.disabled = true
+	
+	print(\"Memory已被收集，将在\", respawn_time, \"秒后重生\")
+
+# 重生Memory
+func respawn():
+	is_collected = false
+	
+	# 恢复可见性和碰撞
+	sprite.visible = true
+	collision.disabled = false
+	
+	print(\"Memory已重生\")
+"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_au0oe"]
 atlas = ExtResource("1_c5y6f")
@@ -98,9 +158,9 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_tf64m"]
 radius = 5.09902
 
-[node name="Memory" type="Area2D"]
-collision_mask = 2
-script = ExtResource("1_au0oe")
+[node name="Memory" type="Area2D" groups=["金币"]]
+collision_mask = 3
+script = SubResource("GDScript_c5y6f")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ngavr")
