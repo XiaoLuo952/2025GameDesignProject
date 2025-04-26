@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var bounce_strength := 500.0    # 弹力强度
+@export var bounce_strength := 400.0    # 弹力强度
 @export var bounce_direction := Vector2.UP  # 默认向上
 @export var use_animation := true       # 是否使用动画
 
