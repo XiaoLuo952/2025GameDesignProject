@@ -26,7 +26,7 @@
 extends Area2D
 
 # 设置延迟时间（秒）
-@export var reload_delay: float = 1.0
+@export var reload_delay: float = 0.01
 
 func _ready():
 	connect("body_entered", _on_body_entered)

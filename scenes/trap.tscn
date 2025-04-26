@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dphf436oqba5j"]
 
-[ext_resource type="Script" uid="uid://cdv5mibpi4aff" path="res://scripts/area_2d.gd" id="1_nhxoo"]
+[ext_resource type="Script" uid="uid://cdv5mibpi4aff" path="res://scripts/trap.gd" id="1_nhxoo"]
 [ext_resource type="Texture2D" uid="uid://xkt87eumvifm" path="res://assets/sprites/test_character/Trap and Weapon/Spike_B.png" id="1_svk5y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nhxoo"]

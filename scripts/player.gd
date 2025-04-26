@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # 移动和跳跃的参数
-const SPEED = 160.0
+const SPEED = 120.0
 const JUMP_VELOCITY = -280.0
 const ACCEL_SMOOTHING = 0.2  # 加速平滑系数
 const DECEL_SMOOTHING = 0.1  # 减速平滑系数
