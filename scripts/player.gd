@@ -64,10 +64,12 @@ func _physics_process(delta: float) -> void:
 		# 获取所有碰撞的平台
 		for i in get_slide_collision_count():
 			var collision = get_slide_collision(i)
-			if collision.get_collider() is CharacterBody2D: # 假设平台都是CharacterBody2D
+			var collider = collision.get_collider()
+			# 检查是否是可移动平台（通过检查必要的方法是否存在）
+			if collider is CharacterBody2D and collider.has_method("set_rising") and collider.has_method("set_downing"):
 				# 确认是从上方碰撞（玩家在平台上方）
 				if collision.get_normal().dot(Vector2.UP) > 0.7:
-					current_platform = collision.get_collider()
+					current_platform = collider
 					if current_platform.has_method("start_moving"):
 						current_platform.start_moving()
 					if Input.is_action_pressed("ui_up"):

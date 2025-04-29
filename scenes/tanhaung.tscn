@@ -7,9 +7,6 @@ script/source = "extends Area2D
 
 @export var bounce_strength := 500.0    # 弹力强度
 @export var bounce_direction := Vector2.UP  # 默认向上
-@export var use_animation := true       # 是否使用动画
-
-@onready var animation_player = $AnimationPlayer
 
 func _ready():
 	# 连接碰撞信号
@@ -21,8 +18,6 @@ func _on_body_entered(body):
 	if body.is_in_group(\"player\"):
 		print(\"玩家触发弹簧效果\")
 		apply_bounce(body)
-		if use_animation:
-			animation_player.play(\"compress\")
 
 func apply_bounce(body):
 	var final_direction = bounce_direction.normalized()
