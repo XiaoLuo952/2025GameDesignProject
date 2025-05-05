@@ -1,0 +1,174 @@
+[gd_scene load_steps=17 format=3 uid="uid://jkhsmctuq6t0"]
+
+[ext_resource type="Texture2D" uid="uid://cwe45jn3lb0cy" path="res://assets/sprites/coin.png" id="1_c5y6f"]
+
+[sub_resource type="GDScript" id="GDScript_c5y6f"]
+script/source = "extends Area2D
+#收集并存储数目，可能需要针对每个实例化对象编号
+
+# 刷新设置
+@export var respawn_time := 5.0  # 重生时间，单位秒
+var initial_position := Vector2.ZERO  # 初始位置
+var is_collected := false  # 是否已被收集
+var respawn_timer := 0.0  # 重生计时器
+
+# 保存原始显示状态的引用
+@onready var sprite = $AnimatedSprite2D
+@onready var collision = $CollisionShape2D
+
+func _ready():
+	# 连接信号
+	body_entered.connect(_on_body_entered)
+	# 记录初始位置
+	initial_position = global_position
+	print(\"Memory初始化完成，位置:\", initial_position)
+
+func _process(delta):
+	# 如果已被收集，更新计时器
+	if is_collected:
+		respawn_timer -= delta
+		if respawn_timer <= 0:
+			respawn()
+
+func _on_body_entered(body: Node2D) -> void:
+	if is_collected:
+		return  # 如果已被收集，忽略碰撞
+		
+	print(\"物体触碰到Memory:\", body.name)
+	if body.is_in_group(\"player\"):
+		print(\"玩家收集到Memory\")
+		# 设置玩家冲刺次数为2
+		body.set_dash_count(2)
+		collect()
+
+# 收集Memory
+func collect():
+	is_collected = true
+	respawn_timer = respawn_time
+	
+	# 隐藏而不是销毁
+	sprite.visible = false
+	collision.disabled = true
+	
+	print(\"Memory已被收集，将在\", respawn_time, \"秒后重生\")
+
+# 重生Memory
+func respawn():
+	is_collected = false
+	
+	# 恢复可见性和碰撞
+	sprite.visible = true
+	collision.disabled = false
+	
+	print(\"Memory已重生\")
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_au0oe"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32l63"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2c1wl"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6pud"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0cvqw"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lptuc"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ndkqr"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rxhmg"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d5su1"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m27bf"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xrm62"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yhoei"]
+atlas = ExtResource("1_c5y6f")
+region = Rect2(176, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ngavr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_au0oe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_32l63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2c1wl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6pud")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0cvqw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lptuc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ndkqr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rxhmg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d5su1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m27bf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xrm62")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yhoei")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tf64m"]
+radius = 5.09902
+
+[node name="Memory" type="Area2D" groups=["金币"]]
+collision_mask = 3
+script = SubResource("GDScript_c5y6f")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ngavr")
+autoplay = "default"
+frame = 8
+frame_progress = 0.490105
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_tf64m")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

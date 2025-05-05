@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdhhxeh32yoho"]
+
+[ext_resource type="Script" uid="uid://7ygxir7jlar0" path="res://scripts/tanhaung.gd" id="2_ddpc3"]
+[ext_resource type="Texture2D" uid="uid://dlj60n6y1rfdo" path="res://assets/sprites/test_character/Trap and Weapon/Jumper.png" id="2_i62o3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ddpc3"]
+size = Vector2(20, 4)
+
+[node name="Area2D" type="Area2D"]
+script = ExtResource("2_ddpc3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_ddpc3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_i62o3")
+region_enabled = true
+region_rect = Rect2(167.691, 2.42359, 22.6228, 13.5764)
