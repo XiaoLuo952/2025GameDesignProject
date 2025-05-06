@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bog2vwrk4e3g3"]
+
+[ext_resource type="Script" uid="uid://ch17eplhd35k4" path="res://scripts/killzone.gd" id="1_usfxq"]
+[ext_resource type="Texture2D" uid="uid://bjqbjqt723qhj" path="res://assets/sprites/test_character/Trap and Weapon/Trap_Spike.png" id="2_1i3h6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lesxa"]
+radius = 6.32456
+
+[node name="BALLTRAP" type="Area2D"]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_usfxq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.521743, 0.521743)
+texture = ExtResource("2_1i3h6")
+region_enabled = true
+region_rect = Rect2(0, 0, 32.175, 31.5288)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_lesxa")
