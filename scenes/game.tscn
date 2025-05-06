@@ -1,13 +1,14 @@
-[gd_scene load_steps=15 format=3 uid="uid://dqghdy28cj1uk"]
+[gd_scene load_steps=16 format=3 uid="uid://dqghdy28cj1uk"]
 
 [ext_resource type="PackedScene" uid="uid://cw2r1hm2vyg5t" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://c6fatgv6uu84h" path="res://assets/sprites/tileset.png" id="2_yqjtg"]
 [ext_resource type="PackedScene" uid="uid://oitb1imup4k2" path="res://scenes/platform.tscn" id="3_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://jkhsmctuq6t0" path="res://scenes/memory.tscn" id="4_lbhrr"]
 [ext_resource type="PackedScene" uid="uid://dphf436oqba5j" path="res://scenes/trap.tscn" id="5_iywne"]
+[ext_resource type="PackedScene" uid="uid://dnimlnlyjm67t" path="res://scenes/tanhaung.tscn" id="6_p57ef"]
 [ext_resource type="PackedScene" uid="uid://b7fy7h0cpmwtm" path="res://scenes/movingplatform.tscn" id="7_u5sy4"]
-[ext_resource type="PackedScene" uid="uid://dfi6b7wwhofym" path="res://scenes/dash_zone.tscn" id="8_0tnpc"]
-[ext_resource type="PackedScene" uid="uid://ccc4pwf5wr7xv" path="res://scenes/moving_platform.tscn" id="9_0tnpc"]
+[ext_resource type="PackedScene" uid="uid://dfa55ypodiixl" path="res://scenes/chaser.tscn" id="8_gee14"]
+[ext_resource type="PackedScene" uid="uid://bc6f1iyifgi1x" path="res://scenes/chuansongmen.tscn" id="9_newid"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -246,7 +247,8 @@ position = Vector2(168, -10)
 
 [node name="Player" parent="." instance=ExtResource("1_uwrxv")]
 z_index = 5
-position = Vector2(-37, -3)
+collision_layer = 3
+collision_mask = 3
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(4, 4)
@@ -258,15 +260,25 @@ position = Vector2(416, -104)
 [node name="trap" parent="." instance=ExtResource("5_iywne")]
 position = Vector2(-112, -7)
 
+[node name="Area2D" parent="." instance=ExtResource("6_p57ef")]
+collision_mask = 3
+
 [node name="Memory2" parent="." instance=ExtResource("4_lbhrr")]
 position = Vector2(344, -165)
 
 [node name="movingplatform" parent="." instance=ExtResource("7_u5sy4")]
 position = Vector2(59, -124)
 
-[node name="DashZone" parent="." instance=ExtResource("8_0tnpc")]
-position = Vector2(-34, -95)
-scale = Vector2(2.4, 1)
+[node name="tanhaung" parent="." instance=ExtResource("6_p57ef")]
+collision_layer = 3
+collision_mask = 3
 
-[node name="MovingPlatform" parent="." instance=ExtResource("9_0tnpc")]
-position = Vector2(153, -36)
+[node name="Chuansongmen" parent="." instance=ExtResource("9_newid")]
+position = Vector2(259, -52)
+target_portal_path = NodePath("../Chuansongmen2")
+
+[node name="Chuansongmen2" parent="." instance=ExtResource("9_newid")]
+position = Vector2(475, -98)
+
+[node name="chaser" parent="." instance=ExtResource("8_gee14")]
+position = Vector2(-1, -22)

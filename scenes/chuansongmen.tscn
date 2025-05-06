@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bc6f1iyifgi1x"]
+
+[ext_resource type="Script" uid="uid://c2hm023q15idu" path="res://scripts/chuansongmen.gd" id="1_wm7fv"]
+[ext_resource type="Texture2D" uid="uid://4hixmjgt14le" path="res://assets/sprites/tupian/74f9be3b-95b7-43d7-9d10-4033863430aa.png" id="2_wm7fv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wm7fv"]
+size = Vector2(28, 6)
+
+[node name="Chuansongmen" type="Area2D"]
+script = ExtResource("1_wm7fv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_wm7fv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = -1.5708
+scale = Vector2(-0.0213376, 0.0531383)
+texture = ExtResource("2_wm7fv")
