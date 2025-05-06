@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # 移动和跳跃的参数
-const SPEED = 120.0
+const SPEED = 80.0
 const JUMP_VELOCITY = -280.0
 const ACCEL_SMOOTHING = 0.2  # 加速平滑系数
 const DECEL_SMOOTHING = 0.1  # 减速平滑系数
@@ -155,3 +155,5 @@ func perform_wall_jump():
 # 公共方法，让其他脚本可以增加冲刺次数
 func set_dash_count(count: int) -> void:
 	dash_count = min(count, MAX_DASH_COUNT)
+	
+	

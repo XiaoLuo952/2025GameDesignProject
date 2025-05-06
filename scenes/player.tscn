@@ -1,7 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://cw2r1hm2vyg5t"]
+[gd_scene load_steps=11 format=3 uid="uid://cw2r1hm2vyg5t"]
 
 [ext_resource type="Texture2D" uid="uid://y7jwddmcfj77" path="res://assets/sprites/test_character/Idle.png" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cgd7ikt1gxpt1" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="Shader" uid="uid://k48satjwu2j0" path="res://assets/afterimage.gdshader" id="2_qhqgy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dqkch"]
+shader = ExtResource("2_qhqgy")
+shader_parameter/fade_amount = 1.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2els"]
 atlas = ExtResource("1_3vyb7")
@@ -47,6 +52,7 @@ collision_layer = 2
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_dqkch")
 position = Vector2(3, -12)
 scale = Vector2(0.583333, 0.577381)
 sprite_frames = SubResource("SpriteFrames_tuyoq")

@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://ihky7oqjb7om"]
+
+[ext_resource type="Shader" uid="uid://k48satjwu2j0" path="res://assets/afterimage.gdshader" id="2_8l0l6"]
+
+[sub_resource type="GDScript" id="GDScript_m2r7o"]
+script/source = "extends Node2D
+@onready var sprite = $Sprite
+@onready var timer = $LifetimeTimer
+
+func setup(source_sprite: AnimatedSprite2D):
+	sprite.sprite_frames = source_sprite.sprite_frames
+	sprite.animation = source_sprite.animation
+	sprite.frame = source_sprite.frame
+	sprite.flip_h = source_sprite.flip_h
+	sprite.modulate.a = 0.7
+	
+	var tween = create_tween()
+	tween.tween_property(sprite, \"modulate:a\", 0.0, 0.3)
+	timer.start()
+
+func _on_lifetime_timer_timeout():
+	queue_free()
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ml27"]
+shader = ExtResource("2_8l0l6")
+shader_parameter/fade_amount = 1.0
+
+[node name="Afterimage" type="Node2D"]
+script = SubResource("GDScript_m2r7o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_5ml27")
+
+[node name="Timer" type="Timer" parent="."]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dqghdy28cj1uk"]
+[gd_scene load_steps=15 format=3 uid="uid://dqghdy28cj1uk"]
 
 [ext_resource type="PackedScene" uid="uid://cw2r1hm2vyg5t" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://c6fatgv6uu84h" path="res://assets/sprites/tileset.png" id="2_yqjtg"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dphf436oqba5j" path="res://scenes/trap.tscn" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://dnimlnlyjm67t" path="res://scenes/tanhaung.tscn" id="6_p57ef"]
 [ext_resource type="PackedScene" uid="uid://b7fy7h0cpmwtm" path="res://scenes/movingplatform.tscn" id="7_u5sy4"]
+[ext_resource type="PackedScene" uid="uid://bc6f1iyifgi1x" path="res://scenes/chuansongmen.tscn" id="8_gee14"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -245,6 +246,8 @@ position = Vector2(168, -10)
 
 [node name="Player" parent="." groups=["player"] instance=ExtResource("1_uwrxv")]
 z_index = 5
+collision_layer = 3
+collision_mask = 3
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(4, 4)
@@ -257,7 +260,7 @@ position = Vector2(416, -104)
 position = Vector2(-112, -7)
 
 [node name="Area2D" parent="." instance=ExtResource("6_p57ef")]
-position = Vector2(102, -3)
+position = Vector2(83, -13)
 collision_mask = 3
 
 [node name="Memory2" parent="." instance=ExtResource("4_lbhrr")]
@@ -265,3 +268,16 @@ position = Vector2(344, -165)
 
 [node name="movingplatform" parent="." instance=ExtResource("7_u5sy4")]
 position = Vector2(59, -124)
+
+[node name="tanhaung" parent="." instance=ExtResource("6_p57ef")]
+position = Vector2(25, -10)
+rotation = 1.60399
+collision_layer = 3
+collision_mask = 3
+
+[node name="Chuansongmen" parent="." instance=ExtResource("8_gee14")]
+position = Vector2(259, -52)
+target_portal_path = NodePath("../Chuansongmen2")
+
+[node name="Chuansongmen2" parent="." instance=ExtResource("8_gee14")]
+position = Vector2(475, -98)
