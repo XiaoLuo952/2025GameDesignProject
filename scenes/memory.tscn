@@ -17,8 +17,6 @@ var respawn_timer := 0.0  # 重生计时器
 @onready var collision = $CollisionShape2D
 
 func _ready():
-	# 连接信号
-	body_entered.connect(_on_body_entered)
 	# 记录初始位置
 	initial_position = global_position
 	print(\"Memory初始化完成，位置:\", initial_position)

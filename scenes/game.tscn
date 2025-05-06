@@ -7,7 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://dphf436oqba5j" path="res://scenes/trap.tscn" id="5_iywne"]
 [ext_resource type="PackedScene" uid="uid://dnimlnlyjm67t" path="res://scenes/tanhaung.tscn" id="6_p57ef"]
 [ext_resource type="PackedScene" uid="uid://b7fy7h0cpmwtm" path="res://scenes/movingplatform.tscn" id="7_u5sy4"]
+<<<<<<< HEAD
 [ext_resource type="PackedScene" uid="uid://bc6f1iyifgi1x" path="res://scenes/chuansongmen.tscn" id="8_gee14"]
+=======
+[ext_resource type="PackedScene" uid="uid://dfa55ypodiixl" path="res://scenes/chaser.tscn" id="8_gee14"]
+>>>>>>> 53ae22e0664ce75d30bf7eedbc2dd00f8caf52a7
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lnu2h"]
 texture = ExtResource("2_yqjtg")
@@ -244,7 +248,7 @@ position = Vector2(153, -90)
 [node name="platform4" parent="." instance=ExtResource("3_lnu2h")]
 position = Vector2(168, -10)
 
-[node name="Player" parent="." groups=["player"] instance=ExtResource("1_uwrxv")]
+[node name="Player" parent="." instance=ExtResource("1_uwrxv")]
 z_index = 5
 collision_layer = 3
 collision_mask = 3
@@ -269,6 +273,7 @@ position = Vector2(344, -165)
 [node name="movingplatform" parent="." instance=ExtResource("7_u5sy4")]
 position = Vector2(59, -124)
 
+<<<<<<< HEAD
 [node name="tanhaung" parent="." instance=ExtResource("6_p57ef")]
 position = Vector2(25, -10)
 rotation = 1.60399
@@ -281,3 +286,7 @@ target_portal_path = NodePath("../Chuansongmen2")
 
 [node name="Chuansongmen2" parent="." instance=ExtResource("8_gee14")]
 position = Vector2(475, -98)
+=======
+[node name="chaser" parent="." instance=ExtResource("8_gee14")]
+position = Vector2(-1, -22)
+>>>>>>> 53ae22e0664ce75d30bf7eedbc2dd00f8caf52a7
