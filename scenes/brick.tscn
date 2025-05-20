@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://y6260gmgaim3"]
+
+[ext_resource type="Script" uid="uid://dvv0aodeqrjae" path="res://scripts/brick.gd" id="1_0w5h4"]
+[ext_resource type="Texture2D" uid="uid://b111182o0dsgs" path="res://assets/sprites/platforms.png" id="2_7mekc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c34n8"]
+size = Vector2(31, 34)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ci8dj"]
+size = Vector2(5.97827, 27.7772)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x7yom"]
+size = Vector2(6.5, 34)
+
+[node name="brick" type="StaticBody2D"]
+script = ExtResource("1_0w5h4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2.27082, 4.03175)
+texture = ExtResource("2_7mekc")
+region_enabled = true
+region_rect = Rect2(0, 0, 15.7983, 10.9158)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, -4)
+shape = SubResource("RectangleShape2D_c34n8")
+
+[node name="Left" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
+position = Vector2(-13, -4)
+scale = Vector2(1.67272, 1.22403)
+shape = SubResource("RectangleShape2D_ci8dj")
+
+[node name="Right" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
+position = Vector2(14.75, -4)
+shape = SubResource("RectangleShape2D_x7yom")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="leftray" type="RayCast2D" parent="."]
+
+[node name="rightray" type="RayCast2D" parent="."]
+
+[connection signal="body_entered" from="Left" to="." method="_on_left_body_entered"]
+[connection signal="body_entered" from="Right" to="." method="_on_right_body_entered"]
