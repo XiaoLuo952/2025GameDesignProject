@@ -1,8 +1,16 @@
 extends CharacterBody2D
 
-# 追踪参数
-const TRACK_DELAY = 2.0    # 2秒后出现
-const POSITION_UPDATE_INTERVAL = 0.006  # 约166fps的更新频率
+# 追踪参数 - 修改为变量而非常量，以便外部脚本修改
+var TRACK_DELAY = 1.0    # 默认延迟1.0秒，外部可覆盖
+var POSITION_UPDATE_INTERVAL = 0.006  # 约166fps的更新频率
+var APPEARANCE_ALPHA = 0.7  # 追踪者的透明度
+
+# 追踪特性
+var use_ghost_effect = true  # 是否使用半透明效果
+var can_pass_through_walls = false  # 是否能够穿墙
+
+# 追踪者ID，便于管理
+var chaser_id = -1
 
 var player = null  # 玩家引用
 var can_track = false  # 是否可以开始追踪
@@ -26,8 +34,16 @@ class MovementState:
 var movement_history = []  # 存储运动状态历史
 
 func _ready():
+	# 将自己添加到"chaser"组，以便dash_zone能够识别
+	add_to_group("chaser")
+	
 	player = get_tree().get_first_node_in_group("player")
 	visible = false
+	
+	# 应用透明度设置
+	if use_ghost_effect:
+		modulate.a = APPEARANCE_ALPHA
+		
 	if player:
 		initial_player_pos = player.global_position
 
@@ -67,13 +83,66 @@ func _physics_process(delta):
 		global_position = past_state.position
 		velocity = past_state.velocity
 		current_history_index += 1
-		move_and_slide()
 		
-		# 检查与玩家的碰撞
-		for i in get_slide_collision_count():
-			var collision = get_slide_collision(i)
-			if collision.get_collider() == player and not is_reloading:
-				is_reloading = true
-				await get_tree().create_timer(0.1).timeout
-				if is_instance_valid(self):
-					get_tree().reload_current_scene() 
+		# 如果可以穿墙，使用teleport_character而不是move_and_slide
+		if can_pass_through_walls:
+			# 不进行碰撞检测，直接设置位置
+			position += velocity * delta
+			
+			# 穿墙模式下手动检测与玩家的碰撞
+			if not is_reloading and player and is_instance_valid(player):
+				var distance_to_player = global_position.distance_to(player.global_position)
+				if distance_to_player < 20: # 碰撞检测距离，调整为角色大小的合理值
+					is_reloading = true
+					await get_tree().create_timer(0.1).timeout
+					if is_instance_valid(self):
+						get_tree().reload_current_scene()
+		else:
+			move_and_slide()
+			
+			# 检查与玩家的碰撞
+			for i in get_slide_collision_count():
+				var collision = get_slide_collision(i)
+				if collision.get_collider() == player and not is_reloading:
+					is_reloading = true
+					await get_tree().create_timer(0.1).timeout
+					if is_instance_valid(self):
+						get_tree().reload_current_scene() 
+
+# 以下是用于外部脚本设置属性的方法
+func set_delay(delay: float) -> void:
+	TRACK_DELAY = delay
+
+func set_speed_factor(factor: float) -> void:
+	POSITION_UPDATE_INTERVAL = 0.006 / factor  # 除以因子，数值越小更新越快
+
+func set_ghost_effect(enabled: bool) -> void:
+	use_ghost_effect = enabled
+	if is_inside_tree():
+		modulate.a = APPEARANCE_ALPHA if enabled else 1.0
+
+func set_alpha(alpha: float) -> void:
+	APPEARANCE_ALPHA = alpha
+	if is_inside_tree() and use_ghost_effect:
+		modulate.a = alpha
+
+func set_pass_through_walls(enabled: bool) -> void:
+	can_pass_through_walls = enabled
+
+# 设置追踪者ID（由管理器调用）
+func set_chaser_id(id: int) -> void:
+	chaser_id = id
+
+# 强制追踪者立即出现
+func force_appear() -> void:
+	has_player_moved = true
+	waiting_for_movement = false
+	track_timer = 0
+	
+	if player and movement_history.size() == 0:
+		initial_player_pos = player.global_position
+		movement_history.push_back(MovementState.new(initial_player_pos, Vector2.ZERO))
+	
+	global_position = initial_player_pos if initial_player_pos else global_position
+	visible = true
+	can_track = true 

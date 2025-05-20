@@ -1,6 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://hbwlo4b2yktx"]
+[gd_scene load_steps=3 format=3 uid="uid://c3iuv7yb660f5"]
 
-[ext_resource type="Script" path="res://scripts/chaser_manager.gd" id="1_2e3f4"]
+[ext_resource type="Script" uid="uid://bkxbdxksorn8m" path="res://scripts/chaser_manager.gd" id="1_mqy8d"]
+[ext_resource type="PackedScene" uid="uid://dfa55ypodiixl" path="res://scenes/chaser.tscn" id="2_pq4kb"]
 
 [node name="ChaserManager" type="Node"]
-script = ExtResource("1_2e3f4")
+script = ExtResource("1_mqy8d")
+chaser_scene = ExtResource("2_pq4kb")
+chaser_configs = Array[Dictionary]([{
+"delay": 1.0,
+"speed_factor": 1.0
+}, {
+"delay": 1.2,
+"ghost_effect": true,
+"speed_factor": 1.2
+}, {
+"delay": 1.4,
+"pass_through_walls": true,
+"speed_factor": 1.5
+}])

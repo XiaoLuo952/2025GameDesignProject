@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # 移动和跳跃的参数
-const SPEED = 80.0
+const SPEED = 120.0
 const JUMP_VELOCITY = -280.0
 const ACCEL_SMOOTHING = 0.2  # 加速平滑系数
 const DECEL_SMOOTHING = 0.1  # 减速平滑系数
@@ -32,11 +32,14 @@ var platform_velocity = Vector2.ZERO
 var is_on_moving_platform := false
 
 var is_in_dash_zone := false
-var zone_dash_params := {}  # 存储区域参数
+var zone_dash_params := {"direction": Vector2.ZERO, "speed_multiplier": 1.0, "no_gravity": false}  # 存储区域参数
 
 # 添加平台攀爬相关变量
 var current_climbing_platform = null
 var is_climbing_platform := false
+
+# 添加一个变量来记录当前攀爬的墙壁的方向
+var climbing_wall_direction := Vector2.ZERO
 
 # 修改检测是否靠近墙壁的函数
 func is_near_wall() -> bool:
@@ -49,12 +52,16 @@ func is_near_wall() -> bool:
 	if is_climbing and is_climbing_platform and current_climbing_platform:
 		return true
 	
+	# 重置墙壁方向
+	climbing_wall_direction = Vector2.ZERO
+	
 	# 检查是否正在攀爬平台
 	if left_ray and left_ray.is_colliding():
 		var collider = left_ray.get_collider()
 		if collider is StaticBody2D and collider.has_method("_on_body_entered"):
 			current_climbing_platform = collider
 			is_climbing_platform = true
+			climbing_wall_direction = Vector2.LEFT
 			return true
 	
 	if right_ray and right_ray.is_colliding():
@@ -62,6 +69,7 @@ func is_near_wall() -> bool:
 		if collider is StaticBody2D and collider.has_method("_on_body_entered"):
 			current_climbing_platform = collider
 			is_climbing_platform = true
+			climbing_wall_direction = Vector2.RIGHT
 			return true
 	
 	# 只有当光线确实没有检测到墙壁时才清除攀爬状态
@@ -72,6 +80,7 @@ func is_near_wall() -> bool:
 				current_climbing_platform.clear_climbing_player()
 			current_climbing_platform = null
 			is_climbing_platform = false
+			climbing_wall_direction = Vector2.ZERO
 	
 	return (left_ray and left_ray.is_colliding()) or (right_ray and right_ray.is_colliding())
 
@@ -81,10 +90,10 @@ func _physics_process(delta: float) -> void:
 		# 获取平台的速度并应用到玩家身上
 		velocity.x = current_moving_platform.velocity.x
 	
-	# 在现有代码开头添加区域检测
+	# 区域冲刺状态检测
 	if is_in_dash_zone:
-		if not $DashZone.has_overlapping_bodies():
-			end_zone_dash()
+		# DashZone区域本身负责管理玩家进入/退出状态
+		pass
 	# 更新墙跳冷却计时器
 	if wall_jump_timer > 0:
 		wall_jump_timer -= delta
@@ -187,8 +196,13 @@ func _physics_process(delta: float) -> void:
 			# 获取左右输入
 			var horizontal_direction = Input.get_axis("ui_left", "ui_right")
 			
-			# 跟随平台的水平移动 - 关键修复
-			velocity.x = current_climbing_platform.velocity.x
+			# 完全禁用玩家自身的水平移动，防止卡顿
+			velocity.x = 0
+			
+			# 跟随平台的水平位置
+			if climbing_wall_direction != Vector2.ZERO:
+				# 根据射线位置更新玩家位置，保持贴在墙上
+				update_climbing_position()
 				
 			# 处理上下攀爬
 			if current_climbing_platform.velocity.y < 0: # 如果平台正在上升
@@ -200,7 +214,7 @@ func _physics_process(delta: float) -> void:
 				else:
 					velocity.y = current_climbing_platform.velocity.y
 			else:
-				# 普通攀爬的垂直行为
+				# 普通墙壁攀爬的行为
 				var vertical_direction = Input.get_axis("ui_up", "ui_down")
 				velocity.y = vertical_direction * CLIMB_SPEED
 				# 如果没有垂直输入，停止垂直移动
@@ -215,7 +229,7 @@ func _physics_process(delta: float) -> void:
 				velocity.y = 0
 	
 	# 冲刺逻辑
-	if Input.is_action_just_pressed("dash") and dash_count > 0:
+	if Input.is_action_just_pressed("dash") and dash_count > 0 and not is_in_dash_zone:
 		var new_dash_direction = Vector2(
 			Input.get_axis("ui_left", "ui_right"),
 			Input.get_axis("ui_up", "ui_down")  # 即使限制移动，仍允许八方向冲刺
@@ -227,18 +241,27 @@ func _physics_process(delta: float) -> void:
 		is_climbing = false  # 冲刺时停止攀爬
 		start_dash()
 			
+	# 处理冲刺状态		
 	if is_dashing:
-		dash_timer -= delta
-		if dash_timer <= 0:
-			# 平滑退出冲刺
-			is_dashing = false
-			velocity *= DASH_EXIT_SPEED
-			if dash_direction.y < 0:
-				velocity.y = min(velocity.y, JUMP_VELOCITY * 0.7)
-		else:
-			velocity = dash_direction * DASH_SPEED
+		# 区域冲刺和普通冲刺有不同的处理逻辑
+		if is_in_dash_zone:
+			# 区域冲刺 - 保持方向和速度直到离开区域
+			velocity = zone_dash_params.direction * DASH_SPEED * zone_dash_params.speed_multiplier
 			move_and_slide()
 			return
+		else:
+			# 普通冲刺 - 有时间限制
+			dash_timer -= delta
+			if dash_timer <= 0:
+				# 平滑退出冲刺
+				is_dashing = false
+				velocity *= DASH_EXIT_SPEED
+				if dash_direction.y < 0:
+					velocity.y = min(velocity.y, JUMP_VELOCITY * 0.7)
+			else:
+				velocity = dash_direction * DASH_SPEED
+				move_and_slide()
+				return
 	
 	move_and_slide()
 
@@ -273,30 +296,103 @@ func start_zone_dash(
 	reset_count: bool, 
 	no_gravity: bool
 ) -> void:
-	if is_dashing: return
+	# 如果已经在区域冲刺中，不重复触发
+	if is_in_dash_zone: return
 	
-	# 存储参数
+	# 存储参数 - 保存进入时的方向
 	zone_dash_params = {
 		"direction": direction,
 		"speed_multiplier": speed_multiplier,
 		"no_gravity": no_gravity
 	}
 	
-	# 重置冲刺次数
-	if reset_count:
-		dash_count = MAX_DASH_COUNT
+	# 区域进入时不改变冲刺次数
+	# 冲刺次数将在离开区域时刷新
 	
-	# 触发冲刺
+	# 触发区域冲刺
 	is_in_dash_zone = true
-	is_dashing = true
-	dash_timer = DASH_DURATION
+	is_dashing = true  # 设置为冲刺状态，防止受到重力等影响
+	# 移除dash_timer，让其保持冲刺状态直到离开区域
+	
+	# 使用传入的方向和速度
 	velocity = direction * DASH_SPEED * speed_multiplier
 	
+	# 禁用重力如果需要
 	if no_gravity:
 		gravity = 0.0
 
 ## 结束区域冲刺
 func end_zone_dash() -> void:
+	# 只有在区域冲刺中才处理
+	if not is_in_dash_zone: return
+	
 	is_in_dash_zone = false
-	gravity = GRAVITY
+	is_dashing = false  # 结束冲刺状态
+	gravity = GRAVITY   # 恢复重力
+	
+	# 保留一部分速度作为出口速度
 	velocity *= DASH_EXIT_SPEED
+	
+	# 无论之前有几次冲刺，都刷新为1次冲刺
+	dash_count = 1
+	
+	# 检测四周是否有碰撞物体
+	var space_state = get_world_2d().direct_space_state
+	var collision_check_distance = 15.0  # 检测距离，可以根据需要调整
+	var collision_mask = 15  # 二进制为1111，表示检测层0、1、2、3
+	
+	# 四个方向的检测向量
+	var directions = [
+		Vector2.RIGHT,  # 右
+		Vector2.LEFT,   # 左
+		Vector2.UP,     # 上
+		Vector2.DOWN    # 下
+	]
+	
+	# 检测四个方向
+	for direction in directions:
+		# 创建碰撞查询
+		var query = PhysicsRayQueryParameters2D.create(
+			global_position, 
+			global_position + direction * collision_check_distance
+		)
+		query.collision_mask = collision_mask
+		query.exclude = [self]  # 排除自身
+		
+		# 执行射线检测
+		var result = space_state.intersect_ray(query)
+		
+		# 如果检测到物体，触发死亡
+		if result:
+			print("检测到碰撞物体: ", result.collider.name, " 在方向: ", direction)
+			die()
+			break  # 找到一个就足够了，退出循环
+
+# 更新攀爬位置，确保玩家紧贴墙壁
+func update_climbing_position():
+	if current_climbing_platform and is_climbing_platform:
+		# 确保玩家跟随平台的水平位置
+		var platform_position = current_climbing_platform.position
+		var player_offset = 25  # 玩家与平台中心的水平偏移
+		
+		if climbing_wall_direction == Vector2.LEFT:
+			# 平台在右侧，玩家在左侧
+			position.x = platform_position.x - player_offset
+		elif climbing_wall_direction == Vector2.RIGHT:
+			# 平台在左侧，玩家在右侧
+			position.x = platform_position.x + player_offset
+
+## 玩家死亡逻辑
+func die() -> void:
+	# 禁用输入，防止死亡后继续响应控制
+	set_physics_process(false)
+	
+	# 可以添加死亡动画效果
+	# $AnimationPlayer.play("death")
+	
+	# 可以添加死亡音效
+	# $DeathSound.play()
+	
+	# 短暂延迟后重新加载场景
+	await get_tree().create_timer(0.5).timeout
+	get_tree().reload_current_scene()

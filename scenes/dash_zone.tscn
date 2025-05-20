@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dfi6b7wwhofym"]
+[gd_scene load_steps=6 format=3 uid="uid://dfi6b7wwhofym"]
 
 [ext_resource type="Script" uid="uid://bpybyksfay074" path="res://scripts/dash_zone.gd" id="1_1v0ar"]
 [ext_resource type="Texture2D" uid="uid://qpt0c27flfii" path="res://assets/sprites/test_character/Trap and Weapon/01.png" id="1_r4xva"]
@@ -6,16 +6,40 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1v0ar"]
 size = Vector2(51, 28)
 
-[node name="DashZone" type="Area2D"]
-collision_layer = 3
-collision_mask = 3
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ikaw"]
+size = Vector2(20, 21.6786)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a7ak3"]
+size = Vector2(9.56307, 9.93159)
+
+[node name="DashZoneParent" type="Node2D"]
+
+[node name="DashZone" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
 script = ExtResource("1_1v0ar")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DashZone"]
 position = Vector2(-0.5, 1)
 shape = SubResource("RectangleShape2D_1v0ar")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="DashZone"]
 position = Vector2(-0.249999, 0)
 scale = Vector2(3.21875, 1.6875)
 texture = ExtResource("1_r4xva")
+
+[node name="SolidBody" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SolidBody"]
+position = Vector2(0, 1.14984)
+scale = Vector2(2.66247, 1.37003)
+shape = SubResource("RectangleShape2D_7ikaw")
+
+[node name="PreDetector" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PreDetector"]
+position = Vector2(-2.38419e-07, 1.5)
+scale = Vector2(5.85586, -3.32273)
+shape = SubResource("RectangleShape2D_a7ak3")
