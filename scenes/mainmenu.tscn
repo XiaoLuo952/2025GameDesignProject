@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3 uid="uid://bxvuwtpebyin0"]
+
+[ext_resource type="Texture2D" uid="uid://boyqdhe46bn16" path="res://assets/sprites/tupian/bg9.jpg" id="1_natt5"]
+[ext_resource type="Script" uid="uid://coyvvr5yep7do" path="res://scripts/mainmenu.gd" id="1_r3g3c"]
+[ext_resource type="Texture2D" uid="uid://b2n3hq0yjnvdw" path="res://assets/sprites/tupian/QQ截图20250506195201(1)(1).png" id="2_r3g3c"]
+[ext_resource type="Texture2D" uid="uid://cdvtdyygitq2f" path="res://assets/sprites/tupian/QQ截图20250512161443.png" id="4_7yvfd"]
+[ext_resource type="PackedScene" uid="uid://tsi0bxxhvgvd" path="res://scenes/SnowEffect.tscn" id="4_s5g8n"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7yvfd"]
+texture = ExtResource("4_7yvfd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_85riq"]
+texture = ExtResource("4_7yvfd")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dfy5j"]
+texture = ExtResource("4_7yvfd")
+
+[node name="Ui" type="CanvasLayer"]
+script = ExtResource("1_r3g3c")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = -1
+anchor_top = -0.014
+anchor_right = 0.941
+anchor_bottom = 1.029
+offset_left = 2.0
+offset_top = 7.072
+offset_right = 8027.97
+offset_bottom = 4462.21
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.126675, 0.126675)
+texture = ExtResource("1_natt5")
+stretch_mode = 6
+
+[node name="TextureRect2" type="TextureRect" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.019
+anchor_top = -0.043
+anchor_right = -0.019
+anchor_bottom = -0.043
+offset_left = 1941.4
+offset_top = 46.9597
+offset_right = 11724.4
+offset_bottom = 6044.96
+scale = Vector2(0.559368, 0.559368)
+texture = ExtResource("2_r3g3c")
+
+[node name="StartButton" type="Button" parent="."]
+offset_left = 489.0
+offset_top = 469.0
+offset_right = 639.0
+offset_bottom = 534.0
+theme_override_font_sizes/font_size = 27
+theme_override_styles/hover = SubResource("StyleBoxTexture_7yvfd")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_85riq")
+theme_override_styles/normal = SubResource("StyleBoxTexture_dfy5j")
+
+[node name="SnowEffect" parent="." instance=ExtResource("4_s5g8n")]

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://b8dwqq3egh3hc"]
+
+[ext_resource type="Script" uid="uid://ceycc8nbbv4rj" path="res://scripts/barrier.gd" id="1_w8n06"]
+[ext_resource type="Texture2D" uid="uid://qpt0c27flfii" path="res://assets/sprites/test_character/Trap and Weapon/01.png" id="2_igls1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kqs2o"]
+size = Vector2(25.2667, 96.7179)
+
+[node name="Dangban" type="StaticBody2D"]
+script = ExtResource("1_w8n06")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(-0.013237, 3.45039)
+scale = Vector2(1.42585, -1.6243)
+shape = SubResource("RectangleShape2D_kqs2o")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2.22752, 9.29542)
+texture = ExtResource("2_igls1")

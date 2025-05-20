@@ -1,0 +1,150 @@
+[gd_scene load_steps=9 format=3 uid="uid://bwwl531jx0tue"]
+
+[ext_resource type="Script" uid="uid://bphe6mn3v81r6" path="res://scripts/nextmenu.gd" id="1_q8r8j"]
+[ext_resource type="Texture2D" uid="uid://boyqdhe46bn16" path="res://assets/sprites/tupian/bg9.jpg" id="2_p1qw0"]
+[ext_resource type="Texture2D" uid="uid://evbh26vefy2i" path="res://assets/sprites/tupian/QQ截图20250512162945.png" id="3_q8r8j"]
+[ext_resource type="Texture2D" uid="uid://drdyspnxq14sr" path="res://assets/sprites/tupian/脚印.png" id="5_50pov"]
+[ext_resource type="PackedScene" uid="uid://tsi0bxxhvgvd" path="res://scenes/SnowEffect.tscn" id="5_t1c4e"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q8r8j"]
+texture = ExtResource("3_q8r8j")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_50pov"]
+texture = ExtResource("3_q8r8j")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p1qw0"]
+texture = ExtResource("3_q8r8j")
+
+[node name="Ui" type="CanvasLayer"]
+script = ExtResource("1_q8r8j")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = -1
+anchor_top = -0.014
+anchor_right = 0.941
+anchor_bottom = 1.029
+offset_left = 2.0
+offset_top = 7.072
+offset_right = 8027.97
+offset_bottom = 4462.21
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.126675, 0.126675)
+texture = ExtResource("2_p1qw0")
+stretch_mode = 6
+
+[node name="StartButton" type="Button" parent="."]
+offset_left = 194.0
+offset_top = 104.0
+offset_right = 383.0
+offset_bottom = 169.0
+theme_override_font_sizes/font_size = 21
+theme_override_styles/hover = SubResource("StyleBoxTexture_q8r8j")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_50pov")
+theme_override_styles/normal = SubResource("StyleBoxTexture_p1qw0")
+text = "BACKGROUND"
+
+[node name="SnowEffect" parent="." instance=ExtResource("5_t1c4e")]
+
+[node name="脚印" type="Sprite2D" parent="."]
+position = Vector2(917, 204)
+rotation = 3.15953
+scale = Vector2(0.400035, 0.400035)
+texture = ExtResource("5_50pov")
+
+[node name="脚印" type="Sprite2D" parent="脚印"]
+position = Vector2(-5.68211, -177.411)
+scale = Vector2(1.03169, 1.02809)
+texture = ExtResource("5_50pov")
+
+[node name="脚印2" type="Sprite2D" parent="脚印"]
+position = Vector2(-6.49991, -362.41)
+scale = Vector2(1.08608, 1.08608)
+texture = ExtResource("5_50pov")
+
+[node name="脚印3" type="Sprite2D" parent="脚印"]
+position = Vector2(-10.2653, -572.358)
+scale = Vector2(1.14717, 1.14717)
+texture = ExtResource("5_50pov")
+
+[node name="脚印2" type="Sprite2D" parent="."]
+position = Vector2(451, 128)
+rotation = 1.5708
+scale = Vector2(0.375951, 0.375951)
+texture = ExtResource("5_50pov")
+
+[node name="脚印3" type="Sprite2D" parent="脚印2"]
+position = Vector2(-7.97974, -260.672)
+scale = Vector2(1.24597, 1.24597)
+texture = ExtResource("5_50pov")
+
+[node name="脚印4" type="Sprite2D" parent="脚印2"]
+position = Vector2(5.31989, -529.324)
+rotation = -0.000918947
+scale = Vector2(1.34416, 1.34416)
+texture = ExtResource("5_50pov")
+
+[node name="脚印5" type="Sprite2D" parent="脚印2"]
+position = Vector2(-3.05176e-05, -795.316)
+scale = Vector2(1.32598, 1.32598)
+texture = ExtResource("5_50pov")
+
+[node name="StartButton2" type="Button" parent="."]
+offset_left = 824.0
+offset_top = 98.0
+offset_right = 1013.0
+offset_bottom = 163.0
+theme_override_font_sizes/font_size = 21
+theme_override_styles/hover = SubResource("StyleBoxTexture_q8r8j")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_50pov")
+theme_override_styles/normal = SubResource("StyleBoxTexture_p1qw0")
+text = "ESCAPE"
+
+[node name="StartButton3" type="Button" parent="."]
+offset_left = 826.0
+offset_top = 472.0
+offset_right = 1015.0
+offset_bottom = 537.0
+theme_override_font_sizes/font_size = 21
+theme_override_styles/hover = SubResource("StyleBoxTexture_q8r8j")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_50pov")
+theme_override_styles/normal = SubResource("StyleBoxTexture_p1qw0")
+text = "EMBRACE"
+
+[node name="StartButton4" type="Button" parent="."]
+offset_left = 194.0
+offset_top = 466.0
+offset_right = 383.0
+offset_bottom = 531.0
+theme_override_font_sizes/font_size = 21
+theme_override_styles/hover = SubResource("StyleBoxTexture_q8r8j")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_50pov")
+theme_override_styles/normal = SubResource("StyleBoxTexture_p1qw0")
+text = "OVERCOME"
+
+[node name="脚印9" type="Sprite2D" parent="."]
+position = Vector2(748, 505)
+rotation = -1.55776
+scale = Vector2(0.421042, 0.421042)
+texture = ExtResource("5_50pov")
+
+[node name="脚印6" type="Sprite2D" parent="脚印9"]
+position = Vector2(2.37508, -235.131)
+scale = Vector2(0.941987, 0.874861)
+texture = ExtResource("5_50pov")
+
+[node name="脚印7" type="Sprite2D" parent="脚印9"]
+position = Vector2(2.37505, -439.386)
+scale = Vector2(1.04841, 1.04841)
+texture = ExtResource("5_50pov")
+
+[node name="脚印8" type="Sprite2D" parent="脚印9"]
+position = Vector2(-2.37506, -667.392)
+scale = Vector2(0.901075, 0.901075)
+texture = ExtResource("5_50pov")

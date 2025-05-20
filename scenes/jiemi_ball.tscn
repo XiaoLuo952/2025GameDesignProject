@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://lf84earjondn"]
+
+[ext_resource type="Script" uid="uid://drcijhfd32yie" path="res://scripts/jiemi_ball.gd" id="1_fy2ba"]
+[ext_resource type="Texture2D" uid="uid://1c42otgj2jfu" path="res://assets/sprites/tupian/yuanqidan.png" id="2_y3yww"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s3x7o"]
+radius = 76.0066
+
+[node name="JiemiBall" type="Area2D"]
+script = ExtResource("1_fy2ba")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(91, 80)
+scale = Vector2(0.216988, 0.216988)
+texture = ExtResource("2_y3yww")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(91, 82)
+shape = SubResource("CircleShape2D_s3x7o")
