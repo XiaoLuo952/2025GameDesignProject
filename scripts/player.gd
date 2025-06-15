@@ -16,6 +16,14 @@ var is_dashing := false
 var dash_timer := 0.0
 var dash_direction := Vector2.ZERO  # 记录冲刺方向
 
+# 添加状态枚举和金羽毛相关变量
+enum PlayerState {NORMAL, FEATHER}  # 玩家状态：普通、金羽毛
+var current_state = PlayerState.NORMAL  # 当前状态
+var feather_timer = 0.0  # 金羽毛效果持续时间
+@export var FEATHER_DURATION = 5.0  # 金羽毛效果持续5秒
+@export var FEATHER_SPEED = 150.0  # 金羽毛飞行速度
+@export var feather_direction = Vector2.RIGHT  # 金羽毛初始方向
+
 # 攀爬的参数
 const CLIMB_SPEED = 80.0  # 攀爬速度
 const WALL_JUMP_VELOCITY = Vector2(200.0, -350.0)  # 墙跳的初始速度
@@ -85,6 +93,71 @@ func is_near_wall() -> bool:
 	return (left_ray and left_ray.is_colliding()) or (right_ray and right_ray.is_colliding())
 
 func _physics_process(delta: float) -> void:
+	# 处理金羽毛状态
+	match current_state:
+		PlayerState.NORMAL:
+			# 正常状态下的物理处理
+			normal_physics_process(delta)
+		PlayerState.FEATHER:
+			# 金羽毛状态下的物理处理
+			feather_physics_process(delta)
+			# 更新金羽毛计时器
+			feather_timer -= delta
+			if feather_timer <= 0:
+				current_state = PlayerState.NORMAL
+				# 恢复普通玩家图像，隐藏冲击波图像
+				$AnimatedSprite2D.visible = true
+				$FeatherSprite.visible = false
+
+# 添加激活金羽毛效果的公共方法
+func activate_feather(duration: float = FEATHER_DURATION) -> void:
+	current_state = PlayerState.FEATHER
+	feather_timer = duration
+	velocity = Vector2.ZERO  # 重置速度，防止惯性
+
+	# 设置随机初始方向
+	var random_angle = randf_range(0, 2 * PI)
+	feather_direction = Vector2(cos(random_angle), sin(random_angle)).normalized()
+
+	# 显示冲击波图像，隐藏普通玩家图像
+	$AnimatedSprite2D.visible = false
+	$FeatherSprite.visible = true
+	
+	# 设置冲击波图像的初始旋转
+	$FeatherSprite.rotation = feather_direction.angle()
+
+# 添加金羽毛状态下的物理处理函数
+func feather_physics_process(delta: float) -> void:
+	# 八方向移动，无重力
+	var input_direction = Vector2(
+		Input.get_axis("ui_left", "ui_right"),
+		Input.get_axis("ui_up", "ui_down")
+	).normalized()
+	
+	# 如果有输入，更新方向
+	if input_direction != Vector2.ZERO:
+		feather_direction = input_direction
+	
+		# 更新冲击波图像的旋转，使其头部朝向移动方向（平滑过渡）
+		var target_angle = feather_direction.angle()
+		# 使用lerp_angle函数平滑过渡到目标角度
+		$FeatherSprite.rotation = lerp_angle($FeatherSprite.rotation, target_angle, 0.1)
+	else:
+		# 即使没有新输入，也继续平滑旋转到当前方向
+		var target_angle = feather_direction.angle()
+		$FeatherSprite.rotation = lerp_angle($FeatherSprite.rotation, target_angle, 0.1)
+		
+	# 使用平滑插值实现延迟转向效果
+	var target_velocity = feather_direction * FEATHER_SPEED
+	
+	# 始终保持移动，只是方向会根据输入变化
+	velocity = velocity.lerp(target_velocity, 0.07)
+	
+	move_and_slide()
+	
+# 将原来的_physics_process内容移到这个函数中
+func normal_physics_process(delta: float) -> void:
+	print(velocity)
 	# 在现有代码开头添加平台跟随逻辑
 	if is_on_moving_platform and current_moving_platform:
 		# 获取平台的速度并应用到玩家身上
@@ -240,7 +313,7 @@ func _physics_process(delta: float) -> void:
 		dash_count -= 1
 		is_climbing = false  # 冲刺时停止攀爬
 		start_dash()
-			
+	print(is_dashing)
 	# 处理冲刺状态		
 	if is_dashing:
 		# 区域冲刺和普通冲刺有不同的处理逻辑
